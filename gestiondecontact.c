@@ -217,15 +217,15 @@ void delete(){//supprimer
 void def(){//default
     strcpy(contact[0].nom, "taha");
     strcpy(contact[0].num, "0682226573");
-    strcpy(contact[0].email, "taha@gmail.com");
+    strcpy(contact[0].email, "taha.jaiti@gmail.com");
     contact[0].id = 1;
-    strcpy(contact[1].nom, "jaiti");
-    strcpy(contact[1].num, "0682426573");
-    strcpy(contact[1].email, "tahaj@gmail.com");
+    strcpy(contact[1].nom, "ostora");
+    strcpy(contact[1].num, "0669420420");
+    strcpy(contact[1].email, "ostora@gmail.com");
     contact[1].id = 2;
-    strcpy(contact[2].nom, "ka");
-    strcpy(contact[2].num, "0654657643");
-    strcpy(contact[2].email, "ka@gmail.com");
+    strcpy(contact[2].nom, "test1");
+    strcpy(contact[2].num, "0611133322");
+    strcpy(contact[2].email, "test1@gmail.com");
     contact[2].id = 3;
 }
 
