@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -13,6 +14,7 @@ typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id
 contacts contact[MAX];
 int contactcount = 0;
 
+
 void menu(){ //menu
 
     printf("\n\t***** MENU *****\n");
@@ -25,6 +27,11 @@ void menu(){ //menu
 
 }
 
+void fgt(char *var, size_t se) {//fgets
+    fgets(var, se, stdin);
+    var[strcspn(var, "\n")] = 0; // Remove '\n'
+}
+
 int checkname(char *nom) { //check le nom
     for (int i = 0; nom[i] != '\0'; i++) {
         if (!isalpha(nom[i]) && !isspace(nom[i])) { //ila makanch name 7rf et espace kitl3 error
@@ -35,7 +42,7 @@ int checkname(char *nom) { //check le nom
 
 int checknum(char *num) { //check le numero
     if (strlen(num) != 10 || strspn(num, "0123456789") != 10) {
-        printf("Erreur, Entrez un numéro de téléphone valide\n");
+        printf("Erreur, Entrez un numero de telephone valide\n");
         return 0; // return false
     }
     return 1; // return true
@@ -72,25 +79,21 @@ void add(){ //ajouter le contact
         return;}
 
     contacts new; //structer pour les new contacts
-    
 
     do{
         printf("Entrez le Nom de cette contact: ");
-        fgets(new.nom, sizeof(new.nom), stdin);
-        new.nom[strcspn(new.nom, "\n")] = 0;
+        fgt(new.nom,sizeof(new.nom));
     } while (!checkname(new.nom));
     
     do{
         printf("Entrez le Numero de contact(10 chiffres): ");
-        fgets(new.num, sizeof(new.num), stdin);
-        new.num[strcspn(new.num, "\n")] = 0;
+        fgt(new.num,sizeof(new.num));
     } while (!checknum(new.num));    
 
     do
     {
         printf("Entrez le Email de contact: ");
-        fgets(new.email, sizeof(new.email), stdin);
-        new.email[strcspn(new.email, "\n")] = 0;
+        fgt(new.email,sizeof(new.email));
     } while (!checkemail(new.email));
 
     contact[contactcount++] = new; //ajouter le new contact dans le structure de contacts
@@ -98,7 +101,6 @@ void add(){ //ajouter le contact
 }
 
 void show() {//afficher les contacts
-    contacts new;
     if (contactcount == 0) {
         printf("Le carnet est vide.\n");} 
     else {
@@ -114,21 +116,20 @@ void edit() { //modifier les contact
     char nom[MAX_NAME];
     do{
         printf("EEntrez le nom du contact a modifier: ");
-        fgets(nom, sizeof(nom), stdin);
-        nom[strcspn(nom, "\n")] = 0; //remove \n
+        fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
     for (int i = 0; i < contactcount; i++) {
         if (strcmp(contact[i].nom, nom) == 0) {
             do{
                 printf("Entrez le nouveau numero: ");
-                fgets(contact[i].num, sizeof(contact[i].num), stdin);
-                contact[i].num[strcspn(contact[i].num, "\n")] = 0;
+                fgt(contact[i].num,sizeof(contact[i].num));
             } while (!checknum(contact[i].num));    
 
-            printf("Entrez le nouvel email: ");
-            fgets(contact[i].email, sizeof(contact[i].email), stdin);
-            contact[i].email[strcspn(contact[i].email, "\n")] = 0;
+            do{
+                printf("Entrez le nouveau Email: ");
+                fgt(contact[i].email,sizeof(contact[i].email));
+            } while (!checkemail(contact[i].email)); 
 
             printf("Contact modifie avec succes!\n");
             return;
@@ -141,8 +142,7 @@ void search() {//recherce
     char search[MAX_NAME];
     do{
         printf("Entrez le nom du contact a rechercher:: ");
-        fgets(search, sizeof(search), stdin);
-        search[strcspn(search, "\n")] = 0; //remove \n
+        fgt(search,sizeof(search));
     } while (!checkname(search));
 
     for (int i = 0; i < contactcount; i++) {
@@ -161,8 +161,7 @@ void delete(){//supprimer
     char nom[MAX_NAME];
     do{
         printf("Entrez le nom du contact a supprimer: ");
-        fgets(nom, sizeof(nom), stdin);
-        nom[strcspn(nom, "\n")] = 0; //remove \n
+        fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
     for (int i = 0; i < contactcount; i++) { //boucle pour recherche
@@ -190,8 +189,8 @@ int main(){
             case 3:delete();break;
             case 4:show();break;
             case 5:search();break;
-            case 6: printf("Passe une bonne journée!\n"); return 0;
-            default: printf("Choix invalide.\n");
+            case 6:printf("Passe une bonne journée!\n"); return 0;
+            default:printf("Choix invalide.\n");
         }
     }
 
