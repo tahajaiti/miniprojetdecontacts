@@ -10,7 +10,6 @@
 
 typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id;}contacts;
 
-cnt cid;
 contacts contact[MAX];
 int contactcount = 0;
 
