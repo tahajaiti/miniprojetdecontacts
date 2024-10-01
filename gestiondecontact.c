@@ -81,7 +81,7 @@ int checkemail(char *email, int idx){//check le email
            return 0;}  
     }
 
-    if (strncmp(email, "@", MAX_EMAIL) != 0 && strncmp(email, ".", MAX_EMAIL) != 0){
+    if (strchr(email, '@') == NULL && strrchr(email, '.') == NULL) {
         printf(BRED"Erreur, Entrez un Email valide\n"CR);
         return 0;
     }
