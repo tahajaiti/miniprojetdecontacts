@@ -3,6 +3,19 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+#define BBLK "\e[1;30m"
+#define BRED "\e[1;31m"
+#define BGRN "\e[1;32m"
+#define BYEL "\e[1;33m"
+#define BBLU "\e[1;34m"
+#define BMAG "\e[1;35m"
+#define BCYN "\e[1;36m"
+#define BWHT "\e[1;37m"
+#define WHT "\e[0;37m"
+#define GRN "\e[0;32m"
+#define CR "\e[0m"
 
 #define MAX 100
 #define MAX_NAME 50
@@ -12,18 +25,18 @@
 typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id;}contacts;
 
 contacts contact[MAX];
-int contactcount = 3;
+int contactcount = 2;
 int id = 4;
 
 void menu(){ //menu
 
-    printf("\n\t***** MENU *****\n");
-    printf("1. Ajouter un Contact\n");
-    printf("2. Modifier un Contact\n");
-    printf("3. Supprimer un Contact\n");
-    printf("4. Afficher Tous les Contacts\n");
-    printf("5. Rechercher un Contact\n");
-    printf("6. Quitter\n");
+    printf(BMAG"\n\t\t***** MENU *****\n"CR);
+    printf(BYEL"\t1. Ajouter un Contact\n");
+    printf("\t2. Modifier un Contact\n");
+    printf("\t3. Supprimer un Contact\n");
+    printf("\t4. Afficher Tous les Contacts\n");
+    printf("\t5. Rechercher un Contact\n"CR);
+    printf(BRED"\t6. Quitter\n"CR);
 
 }
 
@@ -35,20 +48,20 @@ void fgt(char *var, size_t se) {//fgets
 int checkname(char *nom) { //check le nom
     for (int i = 0; nom[i] != '\0'; i++) {
         if (!isalpha(nom[i]) && !isspace(nom[i])) { //ila makanch name 7rf et espace kitl3 error
-            printf("Erreur, Entrer un nom valide.\n");
+            printf(BRED"Erreur, Entrer un nom valide.\n"CR);
             return 0;}}
     return 1;
 }
 
 int checknum(char *num) { //check le numero
     for (int i = 0; i < contactcount; i++) {
-        if (strcmp(num, contact[i].num) == 0){
-           printf("Erreur, ce numero existe deja\n");
+        if (strcmp(contact[i].num, num) == 0){
+           printf(BRED"Erreur, ce numero existe deja\n"CR);
            return 0;}  
     }
         
     if (strlen(num) != 10 || strspn(num, "0123456789") != 10) {
-        printf("Erreur, Entrez un numero de telephone valide\n");
+        printf(BRED"Erreur, Entrez un numero de telephone valide\n"CR);
         return 0; // return false
     }
     return 1; // return true
@@ -57,12 +70,12 @@ int checknum(char *num) { //check le numero
 int checkemail(char *email){//check le email
     for (int i = 0; i < contactcount; i++) {
         if (strcmp(email, contact[i].email) == 0){
-           printf("Erreur, ce Email existe deja\n");
+           printf(BRED"Erreur, ce Email existe deja\n"CR);
            return 0;}  
     }
 
     if (strchr(email, '@') == NULL && strchr(email, '.') == NULL){
-        printf("Erreur, Entrez un Email valide\n");
+        printf(BRED"Erreur, Entrez un Email valide\n"CR);
         return 0;
     }
     return 1;
@@ -72,7 +85,7 @@ int getchoice() { //nakhdo choix correcte
     char input[50]; //bnsba fgets andiro conversion mn char int 1\n\0
 
     while (1) {
-        printf("\nEntrez un nombre (1-6): ");
+        printf(BYEL"\nEntrez un nombre (1-6): "CR);
         fgets(input, sizeof(input), stdin);
 
         //correction dyal kola caractere wach s7i7a
@@ -80,49 +93,49 @@ int getchoice() { //nakhdo choix correcte
             return input[0] - '0'; // conversion dyal caracter to int avec le valeur ascii
             //ascii dyal 0 hoa 48
         } else {
-            printf("Erreur, entrez un nombre valide.\n");
+            printf(BRED"Erreur, entrez un nombre valide.\n"CR);
         }
     }
 }
 
 void add(){ //ajouter le contact
     if (contactcount >= MAX){ //si le carnet est plain knrj3o false
-        printf("Le carnet est plein.\n");
+        printf(BRED"Le carnet est plein.\n"CR);
         return;}
 
     contacts new; //structer pour les new contacts
 
     do{
-        printf("Entrez le Nom de cette contact: ");
+        printf(BYEL"Entrez le Nom de cette contact: "CR);
         fgt(new.nom,sizeof(new.nom));
     } while (!checkname(new.nom));
     
     do{
-        printf("Entrez le Numero de contact(10 chiffres): ");
+        printf(BYEL"Entrez le Numero de contact(10 chiffres): "CR);
         fgt(new.num,sizeof(new.num));
     } while (!checknum(new.num));    
 
     do
     {
-        printf("Entrez le Email de contact: ");
+        printf(BYEL"Entrez le Email de contact: "CR);
         fgt(new.email,sizeof(new.email));
     } while (!checkemail(new.email));
 
     new.id = id++; //kndiro id jdid
 
     contact[contactcount++] = new; //ajouter le new contact dans le structure de contacts
-    printf("Cet operation est succes!");
+    printf(BGRN"Cet operation est succes!"CR);
 }
 
 void show() {//afficher les contacts
     if (contactcount == 0) {
-        printf("Le carnet est vide.\n");} 
+        printf(BRED"Le carnet est vide.\n"CR);} 
     else {
-        printf("+--+--------------+-------------------+-----------------------+\n");
-        printf("%-4s%-12s%-20s%-50s\n","#  |","Nom           |","Telephone          |","Email                  |");
-        printf("+--+--------------+-------------------+-----------------------+\n");
+        printf(BYEL"+--+--------------+-------------------+-----------------------+\n");
+        printf(BYEL"%-4s%-12s%-20s%-50s\n","#  |","Nom           |","Telephone          |","Email                  |");
+        printf(BYEL"+--+--------------+-------------------+-----------------------+\n");
         for (int i = 0; i < contactcount; i++) {
-            printf("%-4d%-15s%-20s%-50s\n",contact[i].id, contact[i].nom,contact[i].num,contact[i].email);
+            printf(GRN"%-4d%-15s%-20s%-50s\n"WHT,contact[i].id, contact[i].nom,contact[i].num,contact[i].email);
         }
     }
 }
@@ -130,52 +143,52 @@ void show() {//afficher les contacts
 void edit() { //modifier les contact
     char nom[MAX_NAME];
     do{
-        printf("EEntrez le nom du contact a modifier: ");
+        printf(BYEL"EEntrez le nom du contact a modifier: "CR);
         fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
     for (int i = 0; i < contactcount; i++) {
         if (strcmp(contact[i].nom, nom) == 0) {
             do{
-                printf("Entrez le nouveau numero: ");
+                printf(BYEL"Entrez le nouveau numero: "CR);
                 fgt(contact[i].num,sizeof(contact[i].num));
             } while (!checknum(contact[i].num));    
 
             do{
-                printf("Entrez le nouveau Email: ");
+                printf(BYEL"Entrez le nouveau Email: "CR);
                 fgt(contact[i].email,sizeof(contact[i].email));
             } while (!checkemail(contact[i].email)); 
 
-            printf("Contact modifie avec succes!\n");
+            printf(BGRN"Contact modifie avec succes!\n"CR);
             return;
         }
     }
-    printf("Le contact nexiste pas.\n");
+    printf(BRED"Le contact nexiste pas.\n"CR);
 }
 
 void search() {//recherce
     char search[MAX_NAME];
     do{
-        printf("Entrez le nom du contact a rechercher:: ");
+        printf(BYEL"Entrez le nom du contact a rechercher:: "CR);
         fgt(search,sizeof(search));
     } while (!checkname(search));
 
     for (int i = 0; i < contactcount; i++) {
         if (strcmp(contact[i].nom, search) == 0) {
-            printf("Contact existe:\n");
+            printf(BGRN"Contact existe:\n"CR);
             printf("Nom: %s\n", contact[i].nom);
             printf("Telephone: %s\n", contact[i].num);
             printf("Email: %s\n", contact[i].email);
             return;
         }
     }
-    printf("Le contact nexiste pas.\n");
+    printf(BRED"Le contact nexiste pas.\n"CR);
 }
 
 void delete(){//supprimer
     char nom[MAX_NAME];
     do{
-        printf("Entrez le nom du contact a supprimer: ");
+        printf(BYEL"Entrez le nom du contact a supprimer: "CR);
         fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
@@ -186,15 +199,15 @@ void delete(){//supprimer
                 contact[j] = contact[j + 1];
             }
             contactcount--;
-            printf("Contact supprime avec succes!\n");
+            printf(BRED"Contact supprime avec succes!\n"CR);
             return;
         }
     }
-    printf("Le contact nexiste pas.\n");
+    printf(BRED"Le contact nexiste pas.\n"CR);
 
 }
 
-void def(){
+void def(){//default
     strcpy(contact[0].nom, "taha");
     strcpy(contact[0].num, "0682226573");
     strcpy(contact[0].email, "taha@gmail.com");
@@ -216,13 +229,13 @@ int main(){
         menu();
         int choice = getchoice();
         switch (choice) {
-            case 1:add();break;
-            case 2:edit();break;
-            case 3:delete();break;
-            case 4:show();break;
-            case 5:search();break;
-            case 6:printf("Passe une bonne journee!\n"); return 0;
-            default:printf("Choix invalide.\n");
+            case 1:add();sleep(2);break;
+            case 2:edit();sleep(2);break;
+            case 3:delete();sleep(2);break;
+            case 4:show();sleep(2);break;
+            case 5:search();sleep(2);break;
+            case 6:printf(BYEL"Passe une bonne journee!\n"CR); return 0;
+            default:printf(BRED"Choix invalide.\n"CR);sleep(1);
         }
     }
 
