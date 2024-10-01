@@ -12,8 +12,8 @@
 typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id;}contacts;
 
 contacts contact[MAX];
-int contactcount = 0;
-
+int contactcount = 3;
+int id = 4;
 
 void menu(){ //menu
 
@@ -23,7 +23,7 @@ void menu(){ //menu
     printf("3. Supprimer un Contact\n");
     printf("4. Afficher Tous les Contacts\n");
     printf("5. Rechercher un Contact\n");
-    printf("6.Quitter\n");
+    printf("6. Quitter\n");
 
 }
 
@@ -41,6 +41,12 @@ int checkname(char *nom) { //check le nom
 }
 
 int checknum(char *num) { //check le numero
+    for (int i = 0; i < contactcount; i++) {
+        if (strcmp(num, contact[i].num) == 0){
+           printf("Erreur, ce numero existe deja\n");
+           return 0;}  
+    }
+        
     if (strlen(num) != 10 || strspn(num, "0123456789") != 10) {
         printf("Erreur, Entrez un numero de telephone valide\n");
         return 0; // return false
@@ -48,7 +54,13 @@ int checknum(char *num) { //check le numero
     return 1; // return true
 }
 
-int checkemail(char *email){
+int checkemail(char *email){//check le email
+    for (int i = 0; i < contactcount; i++) {
+        if (strcmp(email, contact[i].email) == 0){
+           printf("Erreur, ce Email existe deja\n");
+           return 0;}  
+    }
+
     if (strchr(email, '@') == NULL && strchr(email, '.') == NULL){
         printf("Erreur, Entrez un Email valide\n");
         return 0;
@@ -57,7 +69,7 @@ int checkemail(char *email){
 }
 
 int getchoice() { //nakhdo choix correcte
-    char input[50]; //bsba fgets andiro conversion mn char int 1\n\0
+    char input[50]; //bnsba fgets andiro conversion mn char int 1\n\0
 
     while (1) {
         printf("\nEntrez un nombre (1-6): ");
@@ -96,6 +108,8 @@ void add(){ //ajouter le contact
         fgt(new.email,sizeof(new.email));
     } while (!checkemail(new.email));
 
+    new.id = id++; //kndiro id jdid
+
     contact[contactcount++] = new; //ajouter le new contact dans le structure de contacts
     printf("Cet operation est succes!");
 }
@@ -104,12 +118,13 @@ void show() {//afficher les contacts
     if (contactcount == 0) {
         printf("Le carnet est vide.\n");} 
     else {
+        printf("+--+--------------+-------------------+-----------------------+\n");
+        printf("%-4s%-12s%-20s%-50s\n","#  |","Nom           |","Telephone          |","Email                  |");
+        printf("+--+--------------+-------------------+-----------------------+\n");
         for (int i = 0; i < contactcount; i++) {
-            printf("\nContact %d:\n", i+1);
-            printf("Nom: %s\n", contact[i].nom);
-            printf("Telephone: %s\n", contact[i].num);
-            printf("Email: %s\n", contact[i].email);}
+            printf("%-4d%-15s%-20s%-50s\n",contact[i].id, contact[i].nom,contact[i].num,contact[i].email);
         }
+    }
 }
 
 void edit() { //modifier les contact
@@ -166,6 +181,7 @@ void delete(){//supprimer
 
     for (int i = 0; i < contactcount; i++) { //boucle pour recherche
         if (strcmp(contact[i].nom, nom) == 0) { //stecmp pour confirmation
+
             for (int j = i; j < contactcount - 1; j++) { // supression et iza7a 3la liser
                 contact[j] = contact[j + 1];
             }
@@ -178,7 +194,23 @@ void delete(){//supprimer
 
 }
 
+void def(){
+    strcpy(contact[0].nom, "taha");
+    strcpy(contact[0].num, "0682226573");
+    strcpy(contact[0].email, "taha@gmail.com");
+    contact[0].id = 1;
+    strcpy(contact[1].nom, "jaiti");
+    strcpy(contact[1].num, "0682426573");
+    strcpy(contact[1].email, "tahaj@gmail.com");
+    contact[1].id = 2;
+    strcpy(contact[2].nom, "ka");
+    strcpy(contact[2].num, "0654657643");
+    strcpy(contact[2].email, "ka@gmail.com");
+    contact[2].id = 3;
+}
+
 int main(){
+    def();
 
     while (1) {
         menu();
@@ -189,7 +221,7 @@ int main(){
             case 3:delete();break;
             case 4:show();break;
             case 5:search();break;
-            case 6:printf("Passe une bonne journée!\n"); return 0;
+            case 6:printf("Passe une bonne journee!\n"); return 0;
             default:printf("Choix invalide.\n");
         }
     }
