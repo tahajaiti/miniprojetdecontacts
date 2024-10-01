@@ -5,11 +5,12 @@
 
 #define MAX 100
 #define MAX_NAME 50
-#define MAX_NB 19
+#define MAX_NB 50
 #define MAX_EMAIL 50
 
-typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];}contacts;
+typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id;}contacts;
 
+cnt cid;
 contacts contact[MAX];
 int contactcount = 0;
 
@@ -28,7 +29,7 @@ void menu(){ //menu
 int checkname(char *nom) { //check le nom
     for (int i = 0; nom[i] != '\0'; i++) {
         if (!isalpha(nom[i]) && !isspace(nom[i])) { //ila makanch name 7rf et espace kitl3 error
-            printf("Erreur, Entrer un nombre valide.\n");
+            printf("Erreur, Entrer un nom valide.\n");
             return 0;}}
     return 1;
 }
@@ -38,12 +39,19 @@ int checknum(char *num) { //check le numero
         printf("Erreur, Entrez un numéro de téléphone valide\n");
         return 0; // return false
     }
-
     return 1; // return true
 }
 
+int checkemail(char *email){
+    if (strchr(email, '@') == NULL && strchr(email, '.') == NULL){
+        printf("Erreur, Entrez un Email valide\n");
+        return 0;
+    }
+    return 1;
+}
+
 int getchoice() { //nakhdo choix correcte
-    char input[50]; //bsba fgets andiro conversion mn char int
+    char input[50]; //bsba fgets andiro conversion mn char int 1\n\0
 
     while (1) {
         printf("\nEntrez un nombre (1-6): ");
@@ -65,33 +73,38 @@ void add(){ //ajouter le contact
         return;}
 
     contacts new; //structer pour les new contacts
+    
 
     do{
         printf("Entrez le Nom de cette contact: ");
         fgets(new.nom, sizeof(new.nom), stdin);
-        new.nom[strcspn(new.nom, "\n")] = 0; //remove \n
+        new.nom[strcspn(new.nom, "\n")] = 0;
     } while (!checkname(new.nom));
     
     do{
-        printf("Entrez le Numero de contact: ");
+        printf("Entrez le Numero de contact(10 chiffres): ");
         fgets(new.num, sizeof(new.num), stdin);
         new.num[strcspn(new.num, "\n")] = 0;
     } while (!checknum(new.num));    
 
-    printf("Entrez le Email de contact: ");
-    fgets(new.email, sizeof(new.email), stdin);
-    new.email[strcspn(new.email, "\n")] = 0;
+    do
+    {
+        printf("Entrez le Email de contact: ");
+        fgets(new.email, sizeof(new.email), stdin);
+        new.email[strcspn(new.email, "\n")] = 0;
+    } while (!checkemail(new.email));
 
     contact[contactcount++] = new; //ajouter le new contact dans le structure de contacts
     printf("Cet operation est succes!");
 }
 
 void show() {//afficher les contacts
+    contacts new;
     if (contactcount == 0) {
         printf("Le carnet est vide.\n");} 
     else {
         for (int i = 0; i < contactcount; i++) {
-            printf("\nContact %d:\n", i + 1);
+            printf("\nContact %d:\n", i+1);
             printf("Nom: %s\n", contact[i].nom);
             printf("Telephone: %s\n", contact[i].num);
             printf("Email: %s\n", contact[i].email);}
