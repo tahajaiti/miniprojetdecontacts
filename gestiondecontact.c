@@ -25,7 +25,7 @@
 typedef struct {char nom[MAX_NAME];char num[MAX_NB];char email[MAX_EMAIL];int id;}contacts;
 
 contacts contact[MAX];
-int contactcount = 2;
+int contactcount = 3;
 int id = 4;
 
 void menu(){ //menu
@@ -53,28 +53,35 @@ int checkname(char *nom) { //check le nom
     return 1;
 }
 
-int checknum(char *num) { //check le numero
-    for (int i = 0; i < contactcount; i++) {
-        if (strcmp(contact[i].num, num) == 0){
-           printf(BRED"Erreur, ce numero existe deja\n"CR);
-           return 0;}  
+int checknum(char *num, int idx) { //check le numero
+    for (int i = 0; i <= contactcount; i++) {
+        if (i != idx && strcmp(contact[i].num, num) == 0) {
+            printf(BRED"Erreur, ce numero existe deja\n"CR);
+            return 0;
+        }  
     }
         
-    if (strlen(num) != 10 || strspn(num, "0123456789") != 10) {
+    if (strlen(num) != 10 || strspn(num, "0123456789") != 10 ) {
         printf(BRED"Erreur, Entrez un numero de telephone valide\n"CR);
         return 0; // return false
     }
+
+    if (strncmp(num, "06", 2) != 0 && strncmp(num, "07", 2) != 0) {
+        printf(BRED "Erreur, le numero doit commencer par 06 ou 07\n" CR);
+        return 0; // return false
+    }
+
     return 1; // return true
 }
 
-int checkemail(char *email){//check le email
+int checkemail(char *email, int idx){//check le email
     for (int i = 0; i < contactcount; i++) {
-        if (strcmp(email, contact[i].email) == 0){
+        if (i != idx && strcmp(email, contact[i].email) == 0){
            printf(BRED"Erreur, ce Email existe deja\n"CR);
            return 0;}  
     }
 
-    if (strchr(email, '@') == NULL && strchr(email, '.') == NULL){
+    if (strncmp(email, "@", MAX_EMAIL) != 0 && strncmp(email, ".", MAX_EMAIL) != 0){
         printf(BRED"Erreur, Entrez un Email valide\n"CR);
         return 0;
     }
@@ -113,13 +120,13 @@ void add(){ //ajouter le contact
     do{
         printf(BYEL"Entrez le Numero de contact(10 chiffres): "CR);
         fgt(new.num,sizeof(new.num));
-    } while (!checknum(new.num));    
+    } while (!checknum(new.num, contactcount));    
 
     do
     {
         printf(BYEL"Entrez le Email de contact: "CR);
         fgt(new.email,sizeof(new.email));
-    } while (!checkemail(new.email));
+    } while (!checkemail(new.email, contactcount));
 
     new.id = id++; //kndiro id jdid
 
@@ -147,17 +154,17 @@ void edit() { //modifier les contact
         fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
-    for (int i = 0; i < contactcount; i++) {
+    for (int i = 0; i <= contactcount; i++) {
         if (strcmp(contact[i].nom, nom) == 0) {
             do{
                 printf(BYEL"Entrez le nouveau numero: "CR);
                 fgt(contact[i].num,sizeof(contact[i].num));
-            } while (!checknum(contact[i].num));    
+            } while (!checknum(contact[i].num, i));    
 
             do{
                 printf(BYEL"Entrez le nouveau Email: "CR);
                 fgt(contact[i].email,sizeof(contact[i].email));
-            } while (!checkemail(contact[i].email)); 
+            } while (!checkemail(contact[i].email, i)); 
 
             printf(BGRN"Contact modifie avec succes!\n"CR);
             return;
@@ -192,7 +199,7 @@ void delete(){//supprimer
         fgt(nom,sizeof(nom));
     } while (!checkname(nom));
 
-    for (int i = 0; i < contactcount; i++) { //boucle pour recherche
+    for (int i = 0; i <= contactcount; i++) { //boucle pour recherche
         if (strcmp(contact[i].nom, nom) == 0) { //stecmp pour confirmation
 
             for (int j = i; j < contactcount - 1; j++) { // supression et iza7a 3la liser
