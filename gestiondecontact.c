@@ -211,7 +211,6 @@ void delete() { // supprimer
     printf(BRED"Le contact nexiste pas.\n"CR);
 }
 
-
 void def() { // default
     strcpy(contact[0].nom, "taha");
     strcpy(contact[0].num, "0682226573");
