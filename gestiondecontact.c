@@ -221,7 +221,7 @@ void def() { // default
     strcpy(contact[1].num, "0669420420");
     strcpy(contact[1].email, "ostora@gmail.com");
     contact[1].id = 2;
-    strcpy(contact[2].nom, "test1");
+    strcpy(contact[2].nom, "test");
     strcpy(contact[2].num, "0611133322");
     strcpy(contact[2].email, "test1@gmail.com");
     contact[2].id = 3;
